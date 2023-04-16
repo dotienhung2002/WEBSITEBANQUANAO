@@ -8,7 +8,8 @@ public class Constants {
     // COMMON CONFIG
     // public static final String BASE_URL_FRONTEND = "localhost:3000";
     public static final String BASE_URL_FRONTEND = "cms-fusamate.site";
-    public static final String BASE_URL_IMAGE = "http://fusamate.site/static/";
+//    public static final String BASE_URL_IMAGE = "http://fusamate.site/static/";
+    public static final String BASE_URL_IMAGE = "/Users/abc/Downloads/Workspace/projectFPT/fusamate-be/src/main/resources/static/image/";
 
     public static final String SUFFIX_PASSWORD_DEFAULT = "@Fusamate2022";
     public static String MY_EMAIL = "hungdv21082002@gmail.com";

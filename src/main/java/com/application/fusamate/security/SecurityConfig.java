@@ -1,5 +1,6 @@
 package com.application.fusamate.security;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,9 @@ import com.application.fusamate.filter.JwtFilter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -41,41 +45,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+//    @Bean
+//    public FirebaseApp firebaseApp() throws IOException {
+//        FileInputStream serviceAccount =
+//                new FileInputStream("src/main/resources/serviceAccountKey.json");
+//
+//        FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .setDatabaseUrl("https://your-app.firebaseio.com")
+//                .setStorageBucket("your-app-70415.appspot.com")
+//                .build();
+//
+//        return FirebaseApp.initializeApp(options);
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // http.csrf().disable()
-        // .authorizeRequests()
-        // .antMatchers("/login").permitAll()
-        // .antMatchers("/change-password").permitAll()
-        // .antMatchers("/reset-password").permitAll()
-        // .antMatchers("/employee/**").hasAnyAuthority("admin")
-        // .antMatchers("/customer/**").hasAnyAuthority("admin","employee")
-        // .antMatchers("/product-set/**").hasAnyAuthority("admin")
-        // .antMatchers("/brand/**").hasAnyAuthority("admin")
-        // .antMatchers("/category/**").hasAnyAuthority("admin")
-        // .antMatchers("/madein/**").hasAnyAuthority("admin","employee")
-        // .antMatchers("/size/**").hasAnyAuthority("admin","employee")
-        // .antMatchers("/color/**").hasAnyAuthority("admin","employee")
-        // .antMatchers("/product/**").hasAnyAuthority("admin","employee")
-        // .antMatchers("/promotion/**").hasAnyAuthority("admin")
-        // .antMatchers("/order/**").hasAnyAuthority("admin","employee")
-        // .antMatchers("/stats/**").hasAnyAuthority("admin")
-
-        // http.csrf().disable()
-        // .authorizeRequests().antMatchers("/employee/login",
-        // "/employee/reset-password").permitAll()
-        // .antMatchers("/**").permitAll()
-        // .anyRequest().authenticated()
-        // .and()
-        // .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
-        // .and()
-        // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().exceptionHandling()
-        // .accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint);
-
-        // http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-        
-     
 http.cors().and().csrf().disable()
 .authorizeRequests()
 .antMatchers("/login").permitAll()
@@ -106,52 +91,4 @@ http.cors().and().csrf().disable()
 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint);
 http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
-    // http.csrf().disable()
-    // .authorizeRequests()
-    // .antMatchers("/login").permitAll()
-    // .antMatchers("/change-password").permitAll()
-    // .antMatchers("/reset-password").permitAll()
-    // .antMatchers("/employee/**").hasAnyAuthority("admin")
-    // .antMatchers("/customer/**").hasAnyAuthority("admin","employee")
-    // .antMatchers("/product-set/**").hasAnyAuthority("admin")
-    // .antMatchers("/brand/**").hasAnyAuthority("admin")
-    // .antMatchers("/category/**").hasAnyAuthority("admin")
-    // .antMatchers("/madein/**").hasAnyAuthority("admin","employee")
-    // .antMatchers("/size/**").hasAnyAuthority("admin","employee")
-    // .antMatchers("/color/**").hasAnyAuthority("admin","employee")
-    // .antMatchers("/product/**").hasAnyAuthority("admin","employee")
-    // .antMatchers("/promotion/**").hasAnyAuthority("admin")
-    // .antMatchers("/order/**").hasAnyAuthority("admin","employee")
-    // .antMatchers("/stats/**").hasAnyAuthority("admin")
-    // .anyRequest().authenticated()
-    // .and()
-    // .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
-    // .and()
-    // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint);
-    // http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-    // }
 }
-
-// http.csrf().disable()
-// .authorizeRequests()
-// .antMatchers("/login").permitAll()
-// .antMatchers("/change-password").permitAll()
-// .antMatchers("/reset-password").permitAll()
-// .antMatchers("/employee/**").hasAnyAuthority("admin")
-// .antMatchers("/customer/**").hasAnyAuthority("admin","employee")
-// .antMatchers("/product-set/**").hasAnyAuthority("admin")
-// .antMatchers("/brand/**").hasAnyAuthority("admin")
-// .antMatchers("/category/**").hasAnyAuthority("admin")
-// .antMatchers("/madein/**").hasAnyAuthority("admin","employee")
-// .antMatchers("/size/**").hasAnyAuthority("admin","employee")
-// .antMatchers("/color/**").hasAnyAuthority("admin","employee")
-// .antMatchers("/product/**").hasAnyAuthority("admin","employee")
-// .antMatchers("/promotion/**").hasAnyAuthority("admin")
-// .antMatchers("/order/**").hasAnyAuthority("admin","employee")
-// .antMatchers("/stats/**").hasAnyAuthority("admin")
-// .anyRequest().authenticated()
-// .and()
-// .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
-// .and()
-// .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint);
-// http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

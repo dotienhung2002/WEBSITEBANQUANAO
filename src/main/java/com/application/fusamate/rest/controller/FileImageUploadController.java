@@ -1,6 +1,8 @@
 package com.application.fusamate.rest.controller;
 
 import com.application.fusamate.configuration.Constants;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
@@ -23,16 +28,17 @@ import java.util.Map;
 public class FileImageUploadController {
     @PostMapping("/upload-file")
     public ResponseEntity uploadImage(@RequestParam("file")MultipartFile file) throws IOException {
-        System.out.println(file.getOriginalFilename());
-        System.out.println(file.getName());
-        System.out.println(file.getContentType());
-        System.out.println  (file.getSize());
-        String Path_Directory = "/var/local/backend-fusamate/fusamate-be/src/main/resources/static/image";
-//        String Path_Directory = "/Users/abc/Downloads/Workspace/projectFPT/fusamate-be/src/main/resources/static/image";
-
-        Files.copy(file.getInputStream(), Paths.get(Path_Directory+ File.separator+file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap("cloud_name", "dipuod7ic", "api_key",
+                "984759436885181", "api_secret", "jCLKd0nuPhe_MJASJ16e5dcUYXE", "secure", true));
+        String link = "";
+        try {
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            link = String.valueOf(uploadResult.get("url"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Map map = new HashMap();
-        map.put("url", Constants.BASE_URL_IMAGE +file.getOriginalFilename());
+        map.put("url", link);
         return ResponseEntity.ok(map);
     }
 }
