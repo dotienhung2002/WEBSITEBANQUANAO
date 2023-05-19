@@ -18,15 +18,15 @@ public class UpdateCustomerDto {
 
     private int gender;
 
-    @JsonFormat(pattern="dd/MM/yyyy")
-    @Temporal(TemporalType.DATE)
-    private Date birthDay;
+    // @JsonFormat(pattern="dd/MM/yyyy")
+    // @Temporal(TemporalType.DATE)
+    // private Date birthDay;
 
     private String phone;
 
-    private float height;
+    // private float height;
 
-    private float weight;
+    // private float weight;
 
     private int status;
 }

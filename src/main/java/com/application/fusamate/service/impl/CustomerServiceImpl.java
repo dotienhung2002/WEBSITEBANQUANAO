@@ -30,7 +30,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getCustomer(Long id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Customer does not exist!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Customer does not exist!"));
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new Exception(Constants.DUPLICATED_USER_EMAIL);
         }
         BeanUtils.copyProperties(customerDto, customer);
-    
+
         System.out.println(customer);
 
         return customerRepository.save(customer);
@@ -85,9 +86,9 @@ public class CustomerServiceImpl implements CustomerService {
         updateCustomer.setName(customerDto.getName().trim());
         updateCustomer.setPhone(customerDto.getPhone().trim());
         updateCustomer.setGender(customerDto.getGender());
-        updateCustomer.setBirthDay(customerDto.getBirthDay());
-        updateCustomer.setHeight(customerDto.getHeight());
-        updateCustomer.setWeight(customerDto.getWeight());
+        // updateCustomer.setBirthDay(customerDto.getBirthDay());
+        // updateCustomer.setHeight(customerDto.getHeight());
+        // updateCustomer.setWeight(customerDto.getWeight());
         updateCustomer.setUpdatedAt(new Date());
 
         return customerRepository.save(updateCustomer);
