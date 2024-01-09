@@ -86,7 +86,12 @@ public class CartServiceImpl implements CartService {
             CartProduct newCartProduct = new CartProduct();
             newCartProduct.setProductDetail(productDetailRepository.findById(itemAddedToCartDto.getProductDetailId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sản phẩm không tồn tại")));
-            newCartProduct.setQuantity(itemAddedToCartDto.getQuantity());
+            Optional<ProductDetail> productDetail = productDetailRepository.findById(itemAddedToCartDto.getProductDetailId());
+            if(productDetail.get().getAvailAmount() < itemAddedToCartDto.getQuantity()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Số lượng trong kho không đủ");
+            }else{
+                newCartProduct.setQuantity(itemAddedToCartDto.getQuantity());
+            }
             newCartProduct.setCartGeneral(newCartGeneral);
             cartProductRepository.save(newCartProduct);
 
@@ -112,8 +117,13 @@ public class CartServiceImpl implements CartService {
         cartGeneralRepository.save(existedCartGeneral);
 
         Optional<CartProduct> existedCartProduct = existedCartGeneral.getCartProducts().stream().filter(
-                cartProduct -> cartProduct.getProductDetail().getId().equals(itemAddedToCartDto.getProductDetailId()))
+                        cartProduct -> cartProduct.getProductDetail().getId().equals(itemAddedToCartDto.getProductDetailId()))
                 .findFirst();
+        Optional<ProductDetail> productDetail = productDetailRepository.findById(itemAddedToCartDto.getProductDetailId());
+        if(existedCartProduct.isPresent()
+                && existedCartProduct.get().getQuantity() + itemAddedToCartDto.getQuantity() > productDetail.get().getAvailAmount()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Số lượng trong kho không đủ");
+        }
         existedCartProduct.ifPresent(cartProduct ->
                 cartProduct.setQuantity(cartProduct.getQuantity() + itemAddedToCartDto.getQuantity()));
 
@@ -123,6 +133,9 @@ public class CartServiceImpl implements CartService {
             CartProduct newCartProduct = new CartProduct();
             newCartProduct.setProductDetail(productDetailRepository.findById(itemAddedToCartDto.getProductDetailId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sản phẩm không tồn tại")));
+            if(itemAddedToCartDto.getQuantity() > productDetail.get().getAvailAmount()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Số lượng trong kho không đủ");
+            }
             newCartProduct.setQuantity(itemAddedToCartDto.getQuantity());
             newCartProduct.setCartGeneral(existedCartGeneral);
             cartProductRepository.save(newCartProduct);
@@ -180,8 +193,8 @@ public class CartServiceImpl implements CartService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy giỏ hàng");
         cartProductRepository.deleteByProductDetail(
                 productDetailRepository.findById(itemRemovedFromCartDto.getProductDetailId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm")));
+                        .orElseThrow(() -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND, "Không tìm thấy sản phẩm")));
         return cartGeneralRepository.findByUserAuthToken(itemRemovedFromCartDto.getUserAuthToken()).get();
     }
 
